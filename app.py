@@ -1,209 +1,327 @@
 import random
+import time
+import os
+import platform
 
-# ASCII-арт для виселицы
+# ==========================================================
+# ОЧИСТКА ЭКРАНА
+# ==========================================================
+
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+
+GREEN = "\033[92m"
+RESET = "\033[0m"
+
+# ==========================================================
+# DOS-СТИЛЬ ВВОДА (БЛОЧНЫЙ КУРСОР)
+# ==========================================================
+
+def dos_input(prompt):
+    return input(GREEN + prompt + " █ " + RESET)
+
+
+# ==========================================================
+# ПЛАВНЫЙ ВЫВОД
+# ==========================================================
+
+def slow_print(text, delay=0.02):
+    for char in text:
+        print(GREEN + char + RESET, end="", flush=True)
+        time.sleep(delay)
+    print()
+
+
+# ==========================================================
+# MATRIX-ДОЖДЬ (ЛЁГКИЙ)
+# ==========================================================
+
+def matrix_rain(duration=1.2):
+    symbols = "01アイウエオカキクケコABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    width = 70
+
+    end_time = time.time() + duration
+
+    while time.time() < end_time:
+        line = "".join(random.choice(symbols) for _ in range(width))
+        print(GREEN + line + RESET)
+        time.sleep(0.05)
+
+
+# ==========================================================
+# КРАСИВАЯ ВИСЕЛИЦА
+# ==========================================================
+
 HANGMAN_STAGES = [
     """
-       --------
-       |      |
-       |      
-       |    
-       |      
-       |     
-       -
+     ╔════════════╗
+     ║            ║
+     ║            
+     ║            
+     ║            
+     ║            
+═════╩════════════╩═════
     """,
     """
-       --------
-       |      |
-       |      O
-       |    
-       |      
-       |     
-       -
+     ╔════════════╗
+     ║            ║
+     ║            O
+     ║            
+     ║            
+     ║            
+═════╩════════════╩═════
     """,
     """
-       --------
-       |      |
-       |      O
-       |      |
-       |      
-       |     
-       -
+     ╔════════════╗
+     ║            ║
+     ║            O
+     ║            │
+     ║            
+     ║            
+═════╩════════════╩═════
     """,
     """
-       --------
-       |      |
-       |      O
-       |     /|
-       |      
-       |     
-       -
+     ╔════════════╗
+     ║            ║
+     ║            O
+     ║           ╱│
+     ║            
+     ║            
+═════╩════════════╩═════
     """,
     """
-       --------
-       |      |
-       |      O
-       |     /|\\
-       |      
-       |     
-       -
+     ╔════════════╗
+     ║            ║
+     ║            O
+     ║           ╱│╲
+     ║            
+     ║            
+═════╩════════════╩═════
     """,
     """
-       --------
-       |      |
-       |      O
-       |     /|\\
-       |     / 
-       |     
-       -
+     ╔════════════╗
+     ║            ║
+     ║            O
+     ║           ╱│╲
+     ║           ╱ 
+     ║            
+═════╩════════════╩═════
     """,
     """
-       --------
-       |      |
-       |      O
-       |     /|\\
-       |     / \\
-       |     
-       -
+     ╔════════════╗
+     ║            ║
+     ║            O
+     ║           ╱│╲
+     ║           ╱ ╲
+     ║            
+═════╩════════════╩═════
     """
 ]
 
-# Список слов для угадывания
-WORDS = [
-    "python", "программирование", "компьютер", "алгоритм", "функция",
-    "переменная", "цикл", "условие", "массив", "строка",
-    "класс", "объект", "наследование", "полиморфизм", "инкапсуляция",
-    "база данных", "сервер", "клиент", "протокол", "интерфейс",
-    "библиотека", "фреймворк", "отладка", "тестирование", "рефакторинг"
-]
+# ==========================================================
+# БОЛТАНИЕ
+# ==========================================================
+
+def hanging_animation():
+    frames = [
+        """
+     ╔════════════╗
+     ║            ║
+     ║           \\O
+     ║            │
+     ║           ╱ ╲
+     ║            
+═════╩════════════╩═════
+        """,
+        """
+     ╔════════════╗
+     ║            ║
+     ║            O
+     ║           ╱│╲
+     ║           ╱ ╲
+     ║            
+═════╩════════════╩═════
+        """,
+        """
+     ╔════════════╗
+     ║            ║
+     ║           O/
+     ║            │
+     ║           ╱ ╲
+     ║            
+═════╩════════════╩═════
+        """
+    ]
+
+    for _ in range(4):
+        for frame in frames:
+            clear_screen()
+            print(GREEN + frame + RESET)
+            time.sleep(0.3)
 
 
-def get_random_word():
-    """Возвращает случайное слово из списка."""
-    return random.choice(WORDS).upper()
+# ==========================================================
+# СЛОВА (МНОГО)
+# ==========================================================
+
+WORDS = {
+    "Обычные слова": [
+        {"word": "дом", "hint": "Место, где живут люди"},
+        {"word": "кот", "hint": "Домашнее животное"},
+        {"word": "собака", "hint": "Лучший друг человека"},
+        {"word": "яблоко", "hint": "Популярный фрукт"},
+        {"word": "школа", "hint": "Место обучения"},
+        {"word": "книга", "hint": "Источник знаний"},
+        {"word": "стол", "hint": "Предмет мебели"},
+        {"word": "стул", "hint": "На нём сидят"},
+        {"word": "река", "hint": "Водный поток"},
+        {"word": "лес", "hint": "Много деревьев"},
+        {"word": "гора", "hint": "Высокая природная возвышенность"},
+        {"word": "море", "hint": "Большой водоём"},
+        {"word": "чай", "hint": "Горячий напиток"},
+        {"word": "молоко", "hint": "Белый напиток"},
+        {"word": "солнце", "hint": "Источник света"},
+        {"word": "луна", "hint": "Спутник Земли"},
+    ],
+    "Программирование": [
+        {"word": "python", "hint": "Язык программирования"},
+        {"word": "алгоритм", "hint": "Последовательность действий"},
+        {"word": "переменная", "hint": "Хранит данные"},
+        {"word": "цикл", "hint": "Повторяет код"},
+        {"word": "функция", "hint": "Блок кода"},
+        {"word": "класс", "hint": "Шаблон объекта"},
+        {"word": "объект", "hint": "Экземпляр класса"},
+        {"word": "массив", "hint": "Структура данных"},
+        {"word": "строка", "hint": "Тип данных для текста"},
+        {"word": "компилятор", "hint": "Переводит код"},
+        {"word": "интерфейс", "hint": "Способ взаимодействия"},
+        {"word": "сервер", "hint": "Обслуживает клиентов"},
+    ]
+}
 
 
-def display_game_state(stage, word_progress, guessed_letters, attempts_left):
-    """Отображает текущее состояние игры."""
-    print("\n" + "=" * 50)
-    print(HANGMAN_STAGES[stage])
-    print(f"\nСлово: {' '.join(word_progress)}")
-    print(f"Осталось попыток: {attempts_left}")
-    
-    if guessed_letters:
-        print(f"Угаданные буквы: {', '.join(sorted(guessed_letters))}")
-    print("=" * 50)
+# ==========================================================
+# ИГРА
+# ==========================================================
 
+def choose_category():
+    categories = list(WORDS.keys())
 
-def get_player_input(guessed_letters):
-    """Получает и валидирует ввод игрока."""
+    slow_print("Категории:")
+    for i, cat in enumerate(categories, 1):
+        slow_print(f"{i}. {cat}")
+
     while True:
-        guess = input("\nВведите букву или слово целиком: ").strip().upper()
-        
-        if not guess:
-            print("Пожалуйста, введите что-нибудь.")
-            continue
-        
-        if not guess.isalpha():
-            print("Пожалуйста, вводите только буквы.")
-            continue
-        
-        if len(guess) == 1 and guess in guessed_letters:
-            print(f"Вы уже называли букву '{guess}'. Попробуйте другую.")
-            continue
-        
-        return guess
+        choice = dos_input("Выберите категорию:")
+        if choice.isdigit() and 1 <= int(choice) <= len(categories):
+            return categories[int(choice) - 1]
 
 
-def update_word_progress(word, word_progress, guess):
-    """Обновляет прогресс слова при угаданной букве."""
-    new_progress = list(word_progress)
-    
-    for i, letter in enumerate(word):
-        if letter == guess:
-            new_progress[i] = guess
-    
-    return new_progress
+def get_random_word(category):
+    selected = random.choice(WORDS[category])
+    return selected["word"].upper(), selected["hint"]
+
+
+def display_game(stage, progress, attempts_left):
+    print(GREEN + HANGMAN_STAGES[stage] + RESET)
+    slow_print("Слово: " + " ".join(progress))
+    slow_print(f"Попыток осталось: {attempts_left}")
+
+
+def update_word(word, progress, letter):
+    for i in range(len(word)):
+        if word[i] == letter:
+            progress[i] = letter
 
 
 def play_round():
-    """Играет один раунд виселицы."""
-    word = get_random_word()
-    word_progress = ['_'] * len(word)
-    guessed_letters = set()
-    wrong_guesses = 0
-    max_wrong = len(HANGMAN_STAGES) - 1
-    
-    print("\n" + "🎮 ДОБРО ПОЖАЛОВАТЬ В ИГРУ ВИСЕЛИЦА! 🎮")
-    print(f"Загадано слово из {len(word)} букв.")
-    print("У вас есть 7 попыток, чтобы угадать слово.")
-    
-    while wrong_guesses < max_wrong and '_' in word_progress:
-        display_game_state(wrong_guesses, word_progress, guessed_letters, 
-                          max_wrong - wrong_guesses)
-        
-        guess = get_player_input(guessed_letters)
-        
-        if len(guess) > 1:
-            if guess == word:
-                word_progress = list(word)
-                print(f"\n🎉 Поздравляем! Вы угадали слово: {word}!")
-                return True
-            else:
-                print(f"\n❌ Неправильно! Слово '{guess}' не загадано.")
-                wrong_guesses += 1
-                continue
-        
-        guessed_letters.add(guess)
-        
-        if guess in word:
-            occurrences = word.count(guess)
-            word_progress = update_word_progress(word, word_progress, guess)
-            print(f"\n✅ Правильно! Буква '{guess}' встречается {occurrences} раз(а).")
-        else:
-            wrong_guesses += 1
-            print(f"\n❌ Неправильно! Буквы '{guess}' нет в слове.")
-    
-    display_game_state(wrong_guesses, word_progress, guessed_letters, 0)
-    
-    if '_' not in word_progress:
-        print(f"\n🎉 Поздравляем! Вы угадали слово: {word}!")
-        return True
-    else:
-        print(f"\n💀 Вы проиграли! Загаданное слово было: {word}")
-        return False
+    clear_screen()
+    matrix_rain(1)
+    clear_screen()
 
+    category = choose_category()
+    word, hint = get_random_word(category)
+
+    progress = ["_" for _ in word]
+    wrong = 0
+    hint_used = False
+    max_wrong = len(HANGMAN_STAGES) - 1
+
+    clear_screen()
+
+    while wrong < max_wrong and "_" in progress:
+        display_game(wrong, progress, max_wrong - wrong)
+
+        guess = dos_input("Введите букву или 'подсказка':").upper()
+
+        if guess == "ПОДСКАЗКА":
+            if not hint_used:
+                slow_print("Подсказка: " + hint)
+                hint_used = True
+                wrong += 1
+            else:
+                slow_print("Подсказка уже использована.")
+            continue
+
+        if len(guess) != 1 or not guess.isalpha():
+            continue
+
+        if guess in word:
+            update_word(word, progress, guess)
+        else:
+            wrong += 1
+
+        clear_screen()
+
+    clear_screen()
+
+    if "_" not in progress:
+        slow_print("Matrix Error 404")
+        time.sleep(0.6)
+        slow_print(f"Поздравляю! Это слово: {word}")
+    else:
+        hanging_animation()
+        slow_print("SYSTEM FAILURE")
+        slow_print(f"Слово было: {word}")
+
+    time.sleep(1.5)
+    clear_screen()
+
+
+# ==========================================================
+# MAIN
+# ==========================================================
 
 def main():
-    """Главная функция игры."""
-    print("=" * 50)
-    print("      КОНСОЛЬНАЯ ИГРА ВИСЕЛИЦА (HANGMAN)")
-    print("=" * 50)
-    
-    stats = {"played": 0, "won": 0, "lost": 0}
-    
+    clear_screen()
+    matrix_rain(1.5)
+    clear_screen()
+
+    slow_print("Hello, Player...")
+    slow_print("The Matrix has you...")
+    slow_print("Follow the white cursor ...")
+    time.sleep(1)
+
+    clear_screen()
+    slow_print("Вы попали в игру Висельница в Матрице")
+    time.sleep(1)
+    clear_screen()
+
     while True:
-        won = play_round()
-        
-        stats["played"] += 1
-        if won:
-            stats["won"] += 1
-        else:
-            stats["lost"] += 1
-        
+        slow_print("1. Начать игру")
+        slow_print("2. Выход")
 
-        print(f"\n📊 Статистика: сыграно {stats['played']}, "
-              f"побед {stats['won']}, поражений {stats['lost']}")
-        
+        choice = dos_input("Выберите:")
 
-        while True:
-            again = input("\nХотите сыграть ещё раз? (да/нет): ").strip().lower()
-            if again in ('да', 'д', 'yes', 'y'):
-                break
-            elif again in ('нет', 'н', 'no', 'n'):
-                print("\nСпасибо за игру! До свидания! 👋")
-                return
-            else:
-                print("Пожалуйста, введите 'да' или 'нет'")
+        if choice == "1":
+            play_round()
+        elif choice == "2":
+            slow_print("Disconnecting from Matrix...")
+            break
 
 
 if __name__ == "__main__":
