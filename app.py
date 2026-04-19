@@ -307,7 +307,7 @@ def main():
     time.sleep(1)
 
     clear_screen()
-    slow_print("Вы попали в игру Висельница в Матрице")
+    slow_print("Вы попали в игру Виселица в Матрице")
     time.sleep(1)
     clear_screen()
 
