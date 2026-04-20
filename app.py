@@ -304,7 +304,7 @@ def main():
     slow_print("Hello, Player...")
     slow_print("The Matrix has you...")
     slow_print("Follow the white cursor ...")
-    time.sleep(1.5)
+    time.sleep(2)
 
     clear_screen()
     slow_print("Вы попали в игру Виселица в Матрице")
