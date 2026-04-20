@@ -22,7 +22,7 @@ RESET = "\033[0m"
 # ==========================================================
 
 def dos_input(prompt):
-    return input(GREEN + prompt + " █ " + RESET)
+    return input(GREEN + prompt + "█ " + RESET)
 
 
 # ==========================================================
@@ -280,7 +280,7 @@ def play_round():
     clear_screen()
 
     if "_" not in progress:
-        slow_print("Matrix Error 404")
+        slow_print("ACCESS GRANTED")
         time.sleep(0.6)
         slow_print(f"Поздравляю! Это слово: {word}")
     else:
@@ -304,7 +304,7 @@ def main():
     slow_print("Hello, Player...")
     slow_print("The Matrix has you...")
     slow_print("Follow the white cursor ...")
-    time.sleep(1)
+    time.sleep(1.5)
 
     clear_screen()
     slow_print("Вы попали в игру Виселица в Матрице")
